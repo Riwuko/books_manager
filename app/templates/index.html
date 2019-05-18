@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/general.css') }}"/>
-</head>
-<body>
-    <div id="box">
+{% extends 'layout.html' %}
+{% block body %}
         <a href='/import'>Import books</a>
         <a href='/new'>Add single new book</a>
         <a href='/show'>Show books</a>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-    </div>
-</body>
-</html>
+{% endblock %}
