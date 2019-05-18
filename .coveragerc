@@ -1,2 +1,7 @@
 [run]
 source = app
+omit = app/config/*
+
+[report]
+exclude_lines = 
+    if __name__ == .__main__.:

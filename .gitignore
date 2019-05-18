@@ -5,3 +5,4 @@ __pycache__
 *.swp
 .coverage
 *.db
+config_dev.py
