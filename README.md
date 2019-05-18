@@ -1,4 +1,4 @@
-# Basic Flask App
+# Book manager
 Simple flask application :)
 
 ### Steps to run app in developer mode:
