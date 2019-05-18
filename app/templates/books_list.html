@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block body %}
+        <a href='/'>Main Page</a>
+        Filter:
+        <form method="get">
+            <input type="text" name="title" placeholder="Book's title"/>
+            <input type="text" name="author" placeholder="Author"/>
+            <input type="text" name="category" placeholder="Category"/>
+            <input type="checkbox" name="exactly_match"> Exactly match
+            <button type="submit">Submit</button>
+        </form>
+        Books:
+        <table>
+            <tr>
+                <th>Book title</th><th>Author</th><th>Category</th><th>Description</th>
+            </tr>
+            {% for book in books.items %}
+            <tr>
+                <td>
+                    {{ book.title }}
+                </td>
+                <td>
+                    {{ book.author }}
+                </td>
+                <td>
+                    {{ book.category }}
+                </td>
+                <td>
+                    {{ book.description }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if books.has_prev %}
+        <a href="{{ url_for('endpoint.show_books', page=books.prev_num, **params) }}">Previous books</a>
+        {% endif %}
+        {% if books.has_next %}
+        <a href="{{ url_for('endpoint.show_books', page=books.next_num, **params) }}">Next books</a>
+        {% endif %}
+{% endblock %}

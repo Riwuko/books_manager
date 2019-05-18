@@ -51,3 +51,19 @@ def add_single_book():
         flash('Your book has been added.')
         return redirect(url_for('endpoint.add_single_book'))
 
+
+@endpoint.route('/show', methods=['GET'])
+def show_books():
+    """Shows all books from database or if user set filters, only selected books."""
+    page = request.args.get('page', 1, type=int)
+    filter_params = {
+        'title': request.args.get('title', None),
+        'author': request.args.get('author', None),
+        'category': request.args.get('category', None),
+        'exactly_match': request.args.get('exactly_match', 'off').lower(),
+    }
+    return render_template(
+        'books_list.html',
+        books=get_filtered_books(page, filter_params),
+        params={key: value for key, value in filter_params.items() if value},
+    )
