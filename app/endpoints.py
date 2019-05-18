@@ -27,3 +27,27 @@ def add_imported_books():
         bulk_add_books(books_to_add)
         flash(f'Imported {len(books_to_add)} books. :)')
         return redirect(url_for('endpoint.add_imported_books'))
+
+
+@endpoint.route('/new', methods=['GET', 'POST'])
+def add_single_book():
+    """Add single book to database."""
+    if request.method == 'GET':
+        return render_template('book_form.html')
+    elif request.method == 'POST':
+        form_data = {
+            'author': request.form.get('author'),
+            'title': request.form.get('title'),
+            'category': request.form.get('category'),
+            'description': request.form.get('description'),
+        }
+        existing_book = get_books_by_title(form_data['title'])
+        if any(form_data['author'].lower() == selected.author.lower() for selected in existing_book):
+            flash('This book already exists.')
+            return redirect(url_for('endpoint.add_single_book'))
+        new_book = Book(**form_data)
+        db.session.add(new_book)
+        db.session.commit()
+        flash('Your book has been added.')
+        return redirect(url_for('endpoint.add_single_book'))
+

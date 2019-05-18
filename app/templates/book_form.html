@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block body %}
+        <a href='/'>Main Page</a>
+        <form method="post">
+            <input type="text" name="title" placeholder="Book's title"/>
+            <input type="text" name="author" placeholder="Author"/>
+            <input type="text" name="category" placeholder="Category"/>
+            <input type="text" name="description" placeholder="Description"/>
+            <button type="submit">Submit</button>
+        </form>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+{% endblock %}
