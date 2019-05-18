@@ -3,10 +3,14 @@ from flask import Flask
 
 from endpoints import endpoint
 from errors import error
+from models import db
 
 app = Flask(__name__)
 app.register_blueprint(endpoint)
 app.register_blueprint(error)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'abc'
+
+db.init_app(app)
