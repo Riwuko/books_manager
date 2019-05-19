@@ -1,11 +1,12 @@
 import os
+from unittest.mock import Mock, patch
 
 import pytest
 
 from app.main import app
-from app.models import db
+from app.models import Book, db
+from unittest_tools.unittest_objects import GoogleResponse
 from unittest_tools.unittest_tools import flask_response_data
-
 
 TEST_DATABASE_URI = 'sqlite:///test_project.db'
 
@@ -151,3 +152,68 @@ def test_show_books_endpoint(app_fixture, sql_values, query_string, status_code,
     resp = app_fixture.get(f'/show?{query_string}')
     assert resp.status_code == status_code
     assert "".join(resp_data.split()) in flask_response_data(resp)
+
+
+@pytest.mark.parametrize(
+    'sql_values, response, added_count, total_db',
+    (
+        (
+            '("Book1", "Author1", "Sth", "Descr")',
+            {
+                'items': [
+                    {
+                        'volumeInfo': {
+                            'authors': ['John', 'Mike'],
+                            'title': 'something',
+                            'categories': ['fantasy', 'horror'],
+                            'description': 'some description',
+                        }
+                    },
+                    {
+                        'volumeInfo': {
+                            'authors': ['Amy'],
+                            'title': 'something else',
+                            'categories': ['fiction'],
+                            'description': 'space',
+                        }
+                    },
+                ]
+            },
+            2,
+            3,
+        ),
+        (
+            '("something else", "Amy", "fiction", "space")',
+            {
+                'items': [
+                    {
+                        'volumeInfo': {
+                            'authors': ['John', 'Mike'],
+                            'title': 'something',
+                            'categories': ['fantasy', 'horror'],
+                            'description': 'some description',
+                        }
+                    },
+                    {
+                        'volumeInfo': {
+                            'authors': ['Amy'],
+                            'title': 'something else',
+                            'categories': ['fiction'],
+                            'description': 'space',
+                        }
+                    },
+                ]
+            },
+            1,
+            2,
+        ),
+    ),
+)
+def test_add_imported_books_endpoint(app_fixture, sql_values, response, added_count, total_db):
+    db.engine.execute(f'INSERT INTO books (title, author, category, description) VALUES {sql_values}')
+    with patch('tools.requests.get', Mock(return_value=GoogleResponse(response))):
+        resp = app_fixture.post('/import', data={'keyword': 'keyword'}, follow_redirects=True)
+
+    assert resp.status_code == 200
+    assert ''.join(f'Imported {added_count} books. :)'.split()) in flask_response_data(resp)
+    assert db.session.query(Book).count() == total_db

@@ -3,14 +3,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from app.tools import import_books, prepare_new_books
-
-
-class GoogleResponse:
-    def __init__(self, response):
-        self.response = response
-
-    def json(self):
-        return self.response
+from unittest_tools.unittest_objects import ExistingBook, GoogleResponse
 
 
 @pytest.mark.parametrize(
@@ -75,12 +68,6 @@ class GoogleResponse:
 def test_import_books(response, output):
     with patch('tools.requests.get', Mock(return_value=GoogleResponse(response))):
         assert import_books('keyword') == output
-
-
-class ExistingBook:
-    def __init__(self, author, title):
-        self.author = author
-        self.title = title
 
 
 @pytest.mark.parametrize(
