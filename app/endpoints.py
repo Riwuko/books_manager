@@ -41,7 +41,7 @@ def add_single_book():
             'category': request.form.get('category'),
             'description': request.form.get('description'),
         }
-        existing_book = get_books_by_title(form_data['title'])
+        existing_book = get_books_by_title([form_data['title']])
         if any(form_data['author'].lower() == selected.author.lower() for selected in existing_book):
             flash('This book already exists.')
             return redirect(url_for('endpoint.add_single_book'))

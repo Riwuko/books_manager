@@ -217,3 +217,25 @@ def test_add_imported_books_endpoint(app_fixture, sql_values, response, added_co
     assert resp.status_code == 200
     assert ''.join(f'Imported {added_count} books. :)'.split()) in flask_response_data(resp)
     assert db.session.query(Book).count() == total_db
+
+
+@pytest.mark.parametrize(
+    'sql_values, user_values, total_db',
+    (
+        (
+            '("something", "Amy", "fiction", "space")',
+            {'author': 'Amy', 'title': 'something', 'category': 'fiction', 'description': 'space'},
+            1,
+        ),
+        (
+            '("something", "Amy", "fiction", "space")',
+            {'author': 'Amy', 'title': 'something2', 'category': 'fiction', 'description': 'space'},
+            2,
+        ),
+    ),
+)
+def test_add_single_book_endpoint(app_fixture, sql_values, user_values, total_db):
+    db.engine.execute(f'INSERT INTO books (title, author, category, description) VALUES {sql_values}')
+    resp = app_fixture.post('/new', data=user_values, follow_redirects=True)
+    assert resp.status_code == 200
+    assert db.session.query(Book).count() == total_db
