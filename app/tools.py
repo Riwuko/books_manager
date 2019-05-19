@@ -14,9 +14,9 @@ def import_books(keyword):
     )
     return [
         {
-            'author': ','.join(book['volumeInfo'].get('authors', [])),
+            'author': ', '.join(book['volumeInfo'].get('authors', [])),
             'title': book['volumeInfo'].get('title', ''),
-            'category': ','.join(book['volumeInfo'].get('categories', [])),
+            'category': ', '.join(book['volumeInfo'].get('categories', [])),
             'description': book['volumeInfo'].get('description', ''),
         }
         for book in resp_books
