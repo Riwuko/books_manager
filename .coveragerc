@@ -5,3 +5,4 @@ omit = app/config/*
 [report]
 exclude_lines = 
     if __name__ == .__main__.:
+    def __repr__
