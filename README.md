@@ -35,6 +35,7 @@ Firstly install heroku cli and create account: [Heroku DOC](https://devcenter.he
 ##### Commands to deploy:
 1. `heroku create` only if it's new app, omit this step if you want just update.
 2. `git push heroku master` or if you want push changes from another branch to test run: `git push heroku <branch>:master`.
+3. set environmental variable: `heroku config:set APP_SECRET_KEY=some_secret`
 
 ##### Commands to check app:
 1. `heroku open` or `heroku open --app <app_name>` opens application in web browser.
