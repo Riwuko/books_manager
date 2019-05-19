@@ -26,7 +26,7 @@ def filtering_books(column, value, exactly_match):
         return True
     if exactly_match == 'on':
         return column == value
-    return column.like(f'%{value}%')
+    return column.ilike(f'%{value}%')
 
 
 def get_books_by_title(books_titles):
