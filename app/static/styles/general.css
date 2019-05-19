@@ -31,3 +31,7 @@ th, td {
 tr:nth-child(even) {
     background-color: #568fe8;
 }
+
+.endless_sadness {
+    font-size: 70px;
+}
